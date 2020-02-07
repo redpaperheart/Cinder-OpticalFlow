@@ -5,6 +5,7 @@
 	id = "org.libcinder.opticalflow"
 	author="RPH"
 	summary="OpticalFlow"
+	git="https://github.com/redpaperheart/Cinder-OpticalFlow.git"
 	>
 	<supports os="msw" />
 	<includePath>include</includePath>
