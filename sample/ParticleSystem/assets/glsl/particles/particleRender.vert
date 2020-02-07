@@ -1,6 +1,8 @@
 #version 420
 #extension GL_ARB_shader_storage_buffer_object : require
 
+uniform float uPointSize;
+
 layout( location = 0 ) in int particleId;
 
 struct Particle{
@@ -19,5 +21,6 @@ uniform mat4 ciModelViewProjection;
 
 
 void main(){
+	gl_PointSize = uPointSize;
 	gl_Position = ciModelViewProjection * vec4( particles[particleId].pos, 1 );
 }

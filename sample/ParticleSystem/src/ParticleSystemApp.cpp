@@ -36,7 +36,7 @@ struct Particle
 };
 #pragma pack( pop )
 
-const int NUM_PARTICLES = static_cast<int>(200e3);
+//const int mNumParticles = static_cast<int>(200e3);
 
 class ParticleSystemApp : public App {
   public:
@@ -57,6 +57,15 @@ class ParticleSystemApp : public App {
 	  // Particle system variables 
 	  int								mParticleRangeX = mCamResX * 2;
 	  int								mParticleRangeY = mCamResY * 2;
+	  float								mPointSize = 10.0;
+	  int								mParticlesAlongX = 16;
+	  int								mParticlesAlongY = 12;
+	  int								mParticleGapX = mParticleRangeX / mParticlesAlongX;
+	  int								mParticleGapY = mParticleRangeY / mParticlesAlongY;
+	  int								mParticlePosOffsetX = (mParticleRangeX / mParticlesAlongX)/2;
+	  int								mParticlePosOffsetY = (mParticleRangeY / mParticlesAlongY)/2;
+	  const int							mNumParticles = static_cast<int>(mParticlesAlongX * mParticlesAlongY);
+	  float								mForceMult = 2.0;
 
 
 
@@ -94,24 +103,26 @@ void ParticleSystemApp::setup(){
 
 	// Particle system setup.
 	vector<Particle> particles;
-	particles.assign(NUM_PARTICLES, Particle());
+	particles.assign(mNumParticles, Particle());
 
-	for (unsigned int i = 0; i < particles.size(); ++i){	
-		float x = Rand::randFloat(0, mParticleRangeX);
-		float y = Rand::randFloat(0, mParticleRangeY);
-		float z = 0.0;
 
-		auto& p = particles.at(i);
-		p.pos = vec3(x, y, z);
-		p.home = p.pos;
-		p.ppos = p.home + Rand::randVec3();// *5.0f;
-		p.damping = Rand::randFloat(0.9f, 0.985f);
-		Color c(CM_HSV, lmap<float>(static_cast<float>(i), 0.0f, static_cast<float>(particles.size()), 0.0f, 0.66f), 1.0f, 1.0f);
-		p.color = vec4(c.r, c.g, c.b, 1.0f);
+	for (int i = 0; i < mParticlesAlongX; i++) {
+		for (int j = 0; j < mParticlesAlongY; j++) {
+			float x = (mParticleGapX * i) + mParticlePosOffsetX; // Rand::randFloat(0, mParticleRangeX);
+			float y = (mParticleGapY * j) + mParticlePosOffsetY; //Rand::randFloat(0, mParticleRangeY);
+			float z = 0.0;
+			CI_LOG_I(mParticlesAlongX * j + i);
+			auto& p = particles.at(mParticlesAlongX * j + i);
+			p.pos = vec3(x, y, z);
+			p.home = p.pos;
+			p.ppos = p.home + Rand::randVec3();// *5.0f;
+			p.damping = Rand::randFloat(0.9f, 0.985f);
+			p.color = vec4(1.0);//)vec4(c.r, c.g, c.b, 1.0f);
+		}
 	}
 
 	ivec3 count = gl::getMaxComputeWorkGroupCount();
-	CI_ASSERT(count.x >= (NUM_PARTICLES / WORK_GROUP_SIZE));
+	CI_ASSERT(count.x >= (mNumParticles / WORK_GROUP_SIZE));
 
 	// Create particle buffers on GPU and copy data into the first buffer.
 	// Mark as static since we only write from the CPU once.
@@ -130,7 +141,7 @@ void ParticleSystemApp::setup(){
 		quit();
 	}
 
-	std::vector<GLuint> ids(NUM_PARTICLES);
+	std::vector<GLuint> ids(mNumParticles);
 	GLuint currId = 0;
 	std::generate(ids.begin(), ids.end(), [&currId]() -> GLuint { return currId++; });
 
@@ -170,30 +181,39 @@ void ParticleSystemApp::update(){
 
 	gl::ScopedTextureBind texScope(mOpticalFlow.getOpticalFlowBlurTexture(), 0);
 	mUpdateProg->uniform("uCanvasSize", vec2(mParticleRangeX, mParticleRangeY));
+	mUpdateProg->uniform("uForceMult", mForceMult);
 
 	gl::ScopedBuffer scopedParticleSsbo(mParticleBuffer);
 
-	gl::dispatchCompute(NUM_PARTICLES / WORK_GROUP_SIZE, 1, 1);
+	gl::dispatchCompute(mNumParticles / WORK_GROUP_SIZE, 1, 1);
 	gl::memoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
 
 void ParticleSystemApp::draw(){
 	gl::clear(Color(0, 0, 0));
 
-	// draw optical flow
+	// draw optical flow at top right corner of app window
 	{
 		gl::ScopedMatrices matOpticalFlow;
 		gl::translate(appScreenWidth - mOpticalFlow.getWidth(), 0);
 		mOpticalFlow.drawFlowGrid();
 	}
 
-	// darw particle system
+	// draw camera feed
+	{
+		Rectf bounds(0, 0, mParticleRangeX, mParticleRangeY);
+		gl::draw(mDefaultCamTexture, bounds);
+	}
+
+	// darw particle system on top of camera feed
 	{
 		gl::ScopedGlslProg render(mRenderProg);
 		gl::ScopedBuffer scopedParticleSsbo(mParticleBuffer);
 		gl::ScopedVao vao(mAttributes);
+		glEnable(GL_PROGRAM_POINT_SIZE);
+		mRenderProg->uniform("uPointSize", mPointSize);
 		gl::context()->setDefaultShaderVars();
-		gl::drawArrays(GL_POINTS, 0, NUM_PARTICLES);
+		gl::drawArrays(GL_POINTS, 0, mNumParticles);
 	}
 
 	// log FPS on screen

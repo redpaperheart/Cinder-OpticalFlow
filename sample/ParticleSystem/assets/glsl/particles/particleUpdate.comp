@@ -13,6 +13,7 @@
 //uniforms 
 uniform sampler2D			uTexOpticalFlow;
 uniform vec2 				uCanvasSize;
+uniform float				uForceMult;
 
 vec2						fluidVel;
 const float dt2 = 1.0 / (60.0 * 60.0);
@@ -55,7 +56,7 @@ void main(){
 	
 	// adding optical flow vel
 	fluidVel = lookupOpticalFlowVelocity( particles[gid].pos.xy );
-	position.xy += fluidVel;
+	position.xy += fluidVel * uForceMult;
 
 	vec3 vel = (position - pposition) * damping;
 	particles[gid].ppos = position;

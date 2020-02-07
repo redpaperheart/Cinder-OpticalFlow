@@ -24,6 +24,15 @@
     <Filter Include="Blocks\Cinder-OpticalFlow\include">
       <UniqueIdentifier>{D7D65566-D0A9-4132-9F3C-6E0E0E861B75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{4c4bfe5d-5a5c-4f17-83bb-76ee73eaf03b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\glsl">
+      <UniqueIdentifier>{426945e4-027b-4487-b02e-bead40da73e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\glsl\particles">
+      <UniqueIdentifier>{902840d5-adac-4776-87d7-18c1fefb711f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\ParticleSystemApp.cpp">
@@ -57,5 +66,16 @@
     <ResourceCompile Include="Resources.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\glsl\particles\particleRender.frag">
+      <Filter>assets\glsl\particles</Filter>
+    </None>
+    <None Include="..\assets\glsl\particles\particleRender.vert">
+      <Filter>assets\glsl\particles</Filter>
+    </None>
+    <None Include="..\assets\glsl\particles\particleUpdate.comp">
+      <Filter>assets\glsl\particles</Filter>
+    </None>
   </ItemGroup>
 </Project>
