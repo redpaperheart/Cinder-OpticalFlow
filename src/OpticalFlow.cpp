@@ -20,14 +20,13 @@ void OpticalFlow::setup(int width, int height) {
 void OpticalFlow::setupFbos() {
 
 	gl::Fbo::Format format;
-	format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
-	format.setColorTextureFormat(gl::Texture::Format().internalFormat(GL_RGB32F));
+	//format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
+	format.setColorTextureFormat(gl::Texture::Format().internalFormat(GL_RGBA));
 	mLastTex = gl::Fbo::create(mWidth, mHeight, format);
 	mFlowFbo = gl::Fbo::create(mWidth, mHeight, format);
 	mBlurHFbo = gl::Fbo::create(mWidth, mHeight, format);
 	mBlurVFbo = gl::Fbo::create(mWidth, mHeight, format);
 	mReposFbo = gl::Fbo::create(mWidth, mHeight, format);
-
 }
 
 void OpticalFlow::update(gl::TextureRef cur) {
@@ -38,7 +37,7 @@ void OpticalFlow::update(gl::TextureRef cur) {
 		gl::ScopedFramebuffer fbScpFlow(mFlowFbo);
 		gl::ScopedViewport scpVpFlow(ivec2(0), mFlowFbo->getSize());
 		gl::ScopedMatrices matFlow;
-		gl::ScopedBlendAlpha alphaBlend;
+		//gl::ScopedBlendAlpha alphaBlend;
 		gl::setMatricesWindow(mFlowFbo->getSize());
 
 		mShaders.mFlowShader->uniform("uScale", vec2(1));
@@ -61,7 +60,7 @@ void OpticalFlow::update(gl::TextureRef cur) {
 		gl::ScopedFramebuffer fbScpBlurH(mBlurHFbo);
 		gl::ScopedViewport scpVpBlurH(ivec2(0), mBlurHFbo->getSize());
 		gl::ScopedMatrices matBlurH;
-		gl::ScopedBlendAlpha alphaBlendBlurH;
+		//gl::ScopedBlendAlpha alphaBlendBlurH;
 		gl::setMatricesWindow(mBlurHFbo->getSize());
 		
 		gl::ScopedGlslProg shaderBlurH(mShaders.mBlurShader);
@@ -77,7 +76,7 @@ void OpticalFlow::update(gl::TextureRef cur) {
 		gl::ScopedFramebuffer fbScpBlurV(mBlurVFbo);
 		gl::ScopedViewport scpVpBlurV(ivec2(0), mBlurVFbo->getSize());
 		gl::ScopedMatrices matBlurV;
-		gl::ScopedBlendAlpha alphaBlendBlurV;
+		//gl::ScopedBlendAlpha alphaBlendBlurV;
 
 		gl::clear(Color::black());
 		gl::ScopedGlslProg shaderBlurV(mShaders.mBlurShader);
@@ -96,7 +95,7 @@ void OpticalFlow::update(gl::TextureRef cur) {
 		gl::ScopedFramebuffer fbScpRepos(mReposFbo);
 		gl::ScopedViewport scpVpRepos(ivec2(0), mReposFbo->getSize());
 		gl::ScopedMatrices matRepos;
-		gl::ScopedBlendAlpha alphaBlend;
+		//gl::ScopedBlendAlpha alphaBlend;
 		gl::clear(Color::black());
 
 		gl::ScopedGlslProg shaderRepos(mShaders.mReposShader);
@@ -123,22 +122,18 @@ void OpticalFlow::update(gl::TextureRef cur) {
 }
 
 void OpticalFlow::drawFlowGrid() {
-	//gl::ScopedMatrices matFlowGrid;
 	gl::draw(mFlowFbo->getColorTexture());
 }
 
 void OpticalFlow::drawLastTex() {
-	//gl::ScopedMatrices matLastTex;
 	gl::draw(mLastTex->getColorTexture());
 }
 
 void OpticalFlow::drawBlur() {
-	//gl::ScopedMatrices matBlur;
 	gl::draw(mBlurVFbo->getColorTexture());
 }
 
 void OpticalFlow::drawReposition() {
-	//gl::ScopedMatrices matRep;
 	gl::draw(mReposFbo->getColorTexture());
 }
 

@@ -43,6 +43,7 @@ class ParticleSystemApp : public App {
 	  void								setup() override;
 	  void								update() override;
 	  void								draw() override;
+	  gl::TextureRef					flipCamTexture();
 
 	  // Optical Flow variables
 	  float								mLambda;
@@ -50,6 +51,7 @@ class ParticleSystemApp : public App {
 	  float								mDisplacement;
 	  CaptureRef						mCapture;
 	  gl::TextureRef					mDefaultCamTexture;
+	  gl::FboRef						mCamTexFlippedFbo;
 	  OpticalFlow						mOpticalFlow;
 	  int								mCamResX = 640;
 	  int								mCamResY = 480;
@@ -57,15 +59,15 @@ class ParticleSystemApp : public App {
 	  // Particle system variables 
 	  int								mParticleRangeX = mCamResX * 2;
 	  int								mParticleRangeY = mCamResY * 2;
-	  float								mPointSize = 10.0;
-	  int								mParticlesAlongX = 16;
-	  int								mParticlesAlongY = 12;
+	  float								mParticleSize = 5.0;
+	  int								mParticlesAlongX = 32;
+	  int								mParticlesAlongY = 24;
 	  int								mParticleGapX = mParticleRangeX / mParticlesAlongX;
 	  int								mParticleGapY = mParticleRangeY / mParticlesAlongY;
 	  int								mParticlePosOffsetX = (mParticleRangeX / mParticlesAlongX)/2;
 	  int								mParticlePosOffsetY = (mParticleRangeY / mParticlesAlongY)/2;
 	  const int							mNumParticles = static_cast<int>(mParticlesAlongX * mParticlesAlongY);
-	  float								mForceMult = 2.0;
+	  float								mForceMult = 3.0;
 
 
 
@@ -83,7 +85,6 @@ private:
 void ParticleSystemApp::setup(){
 	gl::enableAlphaBlending();
 
-
 	// Optical Flow setup
 	try {
 		mCapture = Capture::create(mCamResX, mCamResY);
@@ -94,12 +95,14 @@ void ParticleSystemApp::setup(){
 		CI_LOG_EXCEPTION("Failed to init capture ", exc);
 	}
 
+	gl::Fbo::Format format;
+	format.setColorTextureFormat(gl::Texture::Format().internalFormat(GL_RGBA));
+	mCamTexFlippedFbo = gl::Fbo::create(mCamResX, mCamResY, format);
+
 	mOpticalFlow.setup(mCamResX, mCamResY);
 	mOpticalFlow.setLambda(0.1);
 	mOpticalFlow.setBlur(0.5);
 	mOpticalFlow.setDisplacement(0.05f);
-
-
 
 	// Particle system setup.
 	vector<Particle> particles;
@@ -115,8 +118,8 @@ void ParticleSystemApp::setup(){
 			auto& p = particles.at(mParticlesAlongX * j + i);
 			p.pos = vec3(x, y, z);
 			p.home = p.pos;
-			p.ppos = p.home + Rand::randVec3();// *5.0f;
-			p.damping = Rand::randFloat(0.9f, 0.985f);
+			p.ppos = p.home;
+			p.damping = 0.95f;
 			p.color = vec4(1.0);//)vec4(c.r, c.g, c.b, 1.0f);
 		}
 	}
@@ -164,6 +167,18 @@ void ParticleSystemApp::setup(){
 	}
 }
 
+gl::TextureRef ParticleSystemApp::flipCamTexture() {
+	gl::clear(Color::black());
+	gl::ScopedFramebuffer fbScpLastTex(mCamTexFlippedFbo);
+	gl::ScopedViewport scpVpLastTex(ivec2(0), mCamTexFlippedFbo->getSize());
+	gl::ScopedMatrices matLastTex;
+	gl::setMatricesWindow(mCamTexFlippedFbo->getSize());
+	gl::scale(-1, 1);
+	gl::translate(-mCamTexFlippedFbo->getWidth(), 0);
+	gl::draw(mDefaultCamTexture, mCamTexFlippedFbo->getBounds());
+	return mCamTexFlippedFbo->getColorTexture();
+}
+
 void ParticleSystemApp::update(){
 	//optical flow update
 	if (mCapture && mCapture->checkNewFrame()) {
@@ -173,7 +188,7 @@ void ParticleSystemApp::update(){
 		}
 		else {
 			mDefaultCamTexture->update(*mCapture->getSurface());
-			mOpticalFlow.update(mDefaultCamTexture);
+			mOpticalFlow.update(flipCamTexture());
 		}
 	}
 
@@ -202,8 +217,13 @@ void ParticleSystemApp::draw(){
 
 	// draw camera feed
 	{
-		Rectf bounds(0, 0, mParticleRangeX, mParticleRangeY);
-		gl::draw(mDefaultCamTexture, bounds);
+		gl::ScopedMatrices matOpticalFlow;
+		gl::scale(mParticleRangeX / mCamResX, mParticleRangeY / mCamResY);
+		mOpticalFlow.drawFlowGrid();
+
+		//Rectf bounds(0, 0, mParticleRangeX, mParticleRangeY);
+		//gl::draw(mDefaultCamTexture, bounds);
+	
 	}
 
 	// darw particle system on top of camera feed
@@ -212,7 +232,7 @@ void ParticleSystemApp::draw(){
 		gl::ScopedBuffer scopedParticleSsbo(mParticleBuffer);
 		gl::ScopedVao vao(mAttributes);
 		glEnable(GL_PROGRAM_POINT_SIZE);
-		mRenderProg->uniform("uPointSize", mPointSize);
+		mRenderProg->uniform("uParticleSize", mParticleSize);
 		gl::context()->setDefaultShaderVars();
 		gl::drawArrays(GL_POINTS, 0, mNumParticles);
 	}

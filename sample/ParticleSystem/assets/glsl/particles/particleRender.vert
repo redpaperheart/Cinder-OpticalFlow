@@ -1,7 +1,6 @@
 #version 420
 #extension GL_ARB_shader_storage_buffer_object : require
 
-uniform float uPointSize;
 
 layout( location = 0 ) in int particleId;
 
@@ -25,7 +24,6 @@ uniform mat4 ciModelViewProjection;
 uniform mat4 ciModelView;
 
 void main(){
-	gl_PointSize = uPointSize;
 	gl_Position = ciModelView * vec4( particles[particleId].pos, 1 );
 	vertex.home = ciModelView * vec4(particles[particleId].home, 1);
 }

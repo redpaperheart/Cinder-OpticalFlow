@@ -1,8 +1,16 @@
+/*
+
+	ParticleRender.geom
+		- Shuvashis Das | Red Paper Heart Studio
+
+*/
+
 #version 150
 
 layout(points) in;
 layout(line_strip, max_vertices = 64) out;
 
+uniform float uParticleSize;
 uniform mat4 ciProjectionMatrix;
 
 in vData{
@@ -21,17 +29,16 @@ void main(){
 
 	// drawing rectangle
 	for (int j = 0; j < gl_in.length (); ++j) {
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-05,  05, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-uParticleSize,  uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( 05,  05, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( uParticleSize,  uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( 05, -05, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( uParticleSize, -uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-05, -05, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-uParticleSize, -uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-05,  05, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-uParticleSize,  uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		
 	  }
 	  EndPrimitive ();
 }

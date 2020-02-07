@@ -16,7 +16,7 @@ uniform vec2 				uCanvasSize;
 uniform float				uForceMult;
 
 vec2						fluidVel;
-const float dt2 = 1.0 / (60.0 * 60.0);
+const float					dt2 = 1.0 / (60*60.0);
 
 // returns optical flow velocity based on parfticle position
 vec2 lookupOpticalFlowVelocity(vec2 pos) {
@@ -60,7 +60,8 @@ void main(){
 
 	vec3 vel = (position - pposition) * damping;
 	particles[gid].ppos = position;
-	vec3 acc = (home - position) * 32.0f;
+	vec3 acc = (home - position) * 20.0f;
+	//particles[gid].pos = position + vel + acc * dt2;
 	particles[gid].pos = position + vel + acc * dt2;
 
 }
