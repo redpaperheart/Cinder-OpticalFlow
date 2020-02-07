@@ -18,4 +18,20 @@ void main(){
 		EmitVertex();
 	}
 	EndPrimitive();
+
+	// drawing rectangle
+	for (int j = 0; j < gl_in.length (); ++j) {
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-05,  05, 0.0, 0.0) );
+		EmitVertex   ();
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( 05,  05, 0.0, 0.0) );
+		EmitVertex   ();
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( 05, -05, 0.0, 0.0) );
+		EmitVertex   ();
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-05, -05, 0.0, 0.0) );
+		EmitVertex   ();
+		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-05,  05, 0.0, 0.0) );
+		EmitVertex   ();
+		
+	  }
+	  EndPrimitive ();
 }
