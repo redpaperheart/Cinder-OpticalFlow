@@ -134,6 +134,7 @@ void ParticleSystemApp::setup(){
 	try {
 		mRenderProg = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("glsl/particles/particleRender.vert"))
 			.fragment(loadAsset("glsl/particles/particleRender.frag"))
+			.geometry(loadAsset("glsl/particles/particleRender.geom"))
 			.attribLocation("particleId", 0));
 	}
 	catch (gl::GlslProgCompileExc e) {

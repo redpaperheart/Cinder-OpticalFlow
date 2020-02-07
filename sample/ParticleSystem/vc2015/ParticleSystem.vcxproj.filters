@@ -77,5 +77,8 @@
     <None Include="..\assets\glsl\particles\particleUpdate.comp">
       <Filter>assets\glsl\particles</Filter>
     </None>
+    <None Include="..\assets\glsl\particles\particleRender.geom">
+      <Filter>assets\glsl\particles</Filter>
+    </None>
   </ItemGroup>
 </Project>

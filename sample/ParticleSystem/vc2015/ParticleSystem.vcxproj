@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\glsl\particles\particleRender.frag" />
+    <None Include="..\assets\glsl\particles\particleRender.geom" />
     <None Include="..\assets\glsl\particles\particleRender.vert" />
     <None Include="..\assets\glsl\particles\particleUpdate.comp" />
   </ItemGroup>

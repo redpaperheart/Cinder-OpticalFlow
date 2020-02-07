@@ -13,14 +13,19 @@ struct Particle{
 	float	damping;
 };
 
+out vData{
+	vec4	home;
+}vertex;
+
 layout( std140, binding = 0 ) buffer Part{
     Particle particles[];
 };
 
 uniform mat4 ciModelViewProjection;
-
+uniform mat4 ciModelView;
 
 void main(){
 	gl_PointSize = uPointSize;
-	gl_Position = ciModelViewProjection * vec4( particles[particleId].pos, 1 );
+	gl_Position = ciModelView * vec4( particles[particleId].pos, 1 );
+	vertex.home = ciModelView * vec4(particles[particleId].home, 1);
 }
