@@ -7,13 +7,13 @@ layout( location = 0 ) in int particleId;
 struct Particle{
 	vec3	pos;
 	vec3	ppos;
-	vec3	home;
+	vec3	initPos;
 	vec4	color;
 	float	damping;
 };
 
 out vData{
-	vec4	home;
+	vec4	initPos;
 }vertex;
 
 layout( std140, binding = 0 ) buffer Part{
@@ -25,5 +25,5 @@ uniform mat4 ciModelView;
 
 void main(){
 	gl_Position = ciModelView * vec4( particles[particleId].pos, 1 );
-	vertex.home = ciModelView * vec4(particles[particleId].home, 1);
+	vertex.initPos = ciModelView * vec4(particles[particleId].initPos, 1);
 }

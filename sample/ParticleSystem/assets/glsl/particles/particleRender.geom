@@ -14,14 +14,14 @@ uniform float uParticleSize;
 uniform mat4 ciProjectionMatrix;
 
 in vData{
-	vec4	home;
+	vec4	initPos;
 }vertices[];
 
 void drawLines(){
 	for(int i = 0;i < gl_in.length();i++){
 		gl_Position = ciProjectionMatrix * (gl_in[i].gl_Position );
 		EmitVertex();
-		gl_Position = ciProjectionMatrix * vertices[i].home ;
+		gl_Position = ciProjectionMatrix * vertices[i].initPos ;
 		EmitVertex();
 	}
 	EndPrimitive();

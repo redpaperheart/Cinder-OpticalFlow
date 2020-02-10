@@ -31,7 +31,7 @@ struct Particle{
 
 	vec3			pos;
 	vec3			ppos;
-	vec3			home;
+	vec3			initPos;
 	vec4			color;
 	float			damping;
 
@@ -51,7 +51,7 @@ void main(){
 	vec3 position =  particles[gid].pos;
 	vec3 pposition = particles[gid].ppos;
 	float damping =  particles[gid].damping;
-	vec3 home =      particles[gid].home;
+	vec3 home =      particles[gid].initPos;
 	vec4 color =     particles[gid].color;
 	
 	// adding optical flow vel

@@ -28,7 +28,7 @@ struct Particle
 	float   pad1;
 	vec3	ppos;
 	float   pad2;
-	vec3	home;
+	vec3	initPos;
 	float   pad3;
 	vec4    color;
 	float	damping;
@@ -114,11 +114,11 @@ void ParticleSystemApp::setup(){
 			float x = (mParticleGapX * i) + mParticlePosOffsetX; 
 			float y = (mParticleGapY * j) + mParticlePosOffsetY; 
 			float z = 0.0;
-			CI_LOG_I(mParticlesAlongX * j + i);
+			// CI_LOG_I(mParticlesAlongX * j + i);
 			auto& p = particles.at(mParticlesAlongX * j + i);
 			p.pos = vec3(x, y, z);
-			p.home = p.pos;
-			p.ppos = p.home;
+			p.initPos = p.pos;
+			p.ppos = p.initPos;
 			p.damping = 0.95f;
 			p.color = vec4(1.0);//)vec4(c.r, c.g, c.b, 1.0f);
 		}

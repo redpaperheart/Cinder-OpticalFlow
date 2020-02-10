@@ -40,13 +40,13 @@ void Shaders::setup() {
 				}
 
 
-				vec4 getGrayuScale(vec4 col) {
+				vec4 getGrayScale(vec4 col) {
 					float gray = dot(vec3(col.x, col.y, col.z), vec3(0.3, 0.59, 0.11));
 					return vec4(gray, gray, gray, 1);
 				}
 
 				vec4 texture2DRectGray(sampler2D tex, vec2 coord) {
-					return getGrayuScale(texture(tex, coord));
+					return getGrayScale(texture2D(tex, coord));
 				}
 
 				void main()
@@ -122,7 +122,7 @@ void Shaders::setup() {
 				const float pi = 3.14159265;
 
 				vec4 get2DOff(sampler2D tex, vec2 coord) {
-					vec4 col = texture(tex, coord);
+					vec4 col = texture2D(tex, coord);
 					if (col.w > 0.95)  col.z = col.z * -1;
 					return vec4(col.y - col.x, col.z, 1, 1);
 				}
@@ -191,7 +191,7 @@ void Shaders::setup() {
 
 				void main()
 				{
-					vTexCoord0 = vec2(ciTexCoord0.x, ciTexCoord0.y);
+					vTexCoord0 = ciTexCoord0;
 					gl_Position = ciModelViewProjection * ciPosition;
 				}
 
@@ -199,13 +199,13 @@ void Shaders::setup() {
 			.fragment(CI_GLSL(150,
 				in vec2 vTexCoord0;
 				uniform vec2 uAmount;
-				uniform sampler2D tex0;
-				uniform sampler2D tex1;
+				uniform sampler2D  tex0;
+				uniform sampler2D  tex1;
 
 				out vec4 oColor;
 
 				vec2 get2DOff(sampler2D tex, vec2 coord) {
-					vec4 col = texture(tex, coord);
+					vec4 col = texture2D(tex, coord);
 					if (col.w > 0.95)  col.z = col.z * -1;
 					return vec2(-1 * (col.y - col.x), col.z);//,1,1);
 				}
@@ -213,7 +213,7 @@ void Shaders::setup() {
 				void main()
 				{
 					vec2 coord = get2DOff(tex1, vTexCoord0) * uAmount + vTexCoord0;  //relative coordinates  
-					vec4 repos = texture(tex0, coord);
+					vec4 repos = texture2D(tex0, coord);
 					oColor = repos;
 				}
 			))

@@ -41,7 +41,7 @@ void OpticalFlow::update(gl::TextureRef cur) {
 		gl::setMatricesWindow(mFlowFbo->getSize());
 
 		mShaders.mFlowShader->uniform("uScale", vec2(1));
-		mShaders.mFlowShader->uniform("uOffset", vec2(1.0));
+		mShaders.mFlowShader->uniform("uOffset", vec2(0.01));
 		mShaders.mFlowShader->uniform("uLambda", mLambda);
 		mShaders.mFlowShader->uniform("tex0", 0);
 		mShaders.mFlowShader->uniform("tex1", 1);
