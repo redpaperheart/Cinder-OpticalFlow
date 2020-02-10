@@ -20,7 +20,7 @@ void OpticalFlow::setup(int width, int height) {
 void OpticalFlow::setupFbos() {
 
 	gl::Fbo::Format format;
-	//format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
+	format.setSamples( 4 ); // uncomment this to enable 4x antialiasing
 	format.setColorTextureFormat(gl::Texture::Format().internalFormat(GL_RGBA));
 	mLastTex = gl::Fbo::create(mWidth, mHeight, format);
 	mFlowFbo = gl::Fbo::create(mWidth, mHeight, format);

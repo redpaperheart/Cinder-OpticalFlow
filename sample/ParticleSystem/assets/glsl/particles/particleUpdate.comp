@@ -16,7 +16,7 @@ uniform vec2 				uCanvasSize;
 uniform float				uForceMult;
 
 vec2						fluidVel;
-const float					dt2 = 1.0 / (60*60.0);
+const float					dt2 = 1.0 / (10*10.0);
 
 // returns optical flow velocity based on parfticle position
 vec2 lookupOpticalFlowVelocity(vec2 pos) {
@@ -46,13 +46,12 @@ layout( local_size_x = 128, local_size_y = 1, local_size_z = 1 ) in;
 
 void main(){
 
-	uint gid = gl_GlobalInvocationID.x;	// The .y and .z are both 1 in this case.
-
-	vec3 position =  particles[gid].pos;
-	vec3 pposition = particles[gid].ppos;
-	float damping =  particles[gid].damping;
-	vec3 home =      particles[gid].initPos;
-	vec4 color =     particles[gid].color;
+	uint gid			=			gl_GlobalInvocationID.x;	// The .y and .z are both 1 in this case.
+	vec3 position		=			particles[gid].pos;
+	vec3 pposition		=			particles[gid].ppos;
+	float damping		=			particles[gid].damping;
+	vec3 initPos		=			particles[gid].initPos;
+	vec4 color			=			particles[gid].color;
 	
 	// adding optical flow vel
 	fluidVel = lookupOpticalFlowVelocity( particles[gid].pos.xy );
@@ -60,8 +59,7 @@ void main(){
 
 	vec3 vel = (position - pposition) * damping;
 	particles[gid].ppos = position;
-	vec3 acc = (home - position) * 20.0f;
-	//particles[gid].pos = position + vel + acc * dt2;
+	vec3 acc = (initPos - position);
 	particles[gid].pos = position + vel + acc * dt2;
 
 }

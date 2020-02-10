@@ -67,7 +67,7 @@ class ParticleSystemApp : public App {
 	  int								mParticlePosOffsetX = (mParticleRangeX / mParticlesAlongX)/2;
 	  int								mParticlePosOffsetY = (mParticleRangeY / mParticlesAlongY)/2;
 	  const int							mNumParticles = static_cast<int>(mParticlesAlongX * mParticlesAlongY);
-	  float								mForceMult = 3.0;
+	  float								mForceMult = 10.0;
 
 
 
@@ -119,7 +119,7 @@ void ParticleSystemApp::setup(){
 			p.pos = vec3(x, y, z);
 			p.initPos = p.pos;
 			p.ppos = p.initPos;
-			p.damping = 0.95f;
+			p.damping = 0.85f;
 			p.color = vec4(1.0);//)vec4(c.r, c.g, c.b, 1.0f);
 		}
 	}
@@ -171,7 +171,7 @@ gl::TextureRef ParticleSystemApp::flipCamTexture() {
 	gl::clear(Color::black());
 	gl::ScopedFramebuffer fbScpLastTex(mCamTexFlippedFbo);
 	gl::ScopedViewport scpVpLastTex(ivec2(0), mCamTexFlippedFbo->getSize());
-	gl::ScopedMatrices matLastTex;
+	gl::ScopedMatrices matFlipTex;
 	gl::setMatricesWindow(mCamTexFlippedFbo->getSize());
 	gl::scale(-1, 1);
 	gl::translate(-mCamTexFlippedFbo->getWidth(), 0);
@@ -208,19 +208,13 @@ void ParticleSystemApp::update(){
 void ParticleSystemApp::draw(){
 	gl::clear(Color(0, 0, 0));
 
-	// draw optical flow at top right corner of app window
-	{
-		gl::ScopedMatrices matOpticalFlow;
-		gl::translate(appScreenWidth - mOpticalFlow.getWidth(), 0);
-		mOpticalFlow.drawFlowGrid();
-	}
-
 	// draw camera feed
 	{
 		//gl::ScopedMatrices matOpticalFlow;
 		//gl::scale(mParticleRangeX / mCamResX, mParticleRangeY / mCamResY);
 		//mOpticalFlow.drawFlowGrid();
 
+		gl::ScopedMatrices matCamFeed;
 		Rectf bounds(0, 0, mParticleRangeX, mParticleRangeY);
 		gl::draw(flipCamTexture(), bounds);
 	
@@ -235,6 +229,13 @@ void ParticleSystemApp::draw(){
 		mRenderProg->uniform("uParticleSize", mParticleSize);
 		gl::context()->setDefaultShaderVars();
 		gl::drawArrays(GL_POINTS, 0, mNumParticles);
+	}
+
+	// draw optical flow at top right corner of app window
+	{
+		gl::ScopedMatrices matOpticalFlow;
+		gl::translate(appScreenWidth - mOpticalFlow.getWidth(), 0);
+		mOpticalFlow.drawFlowGrid();
 	}
 
 	// log FPS on screen
