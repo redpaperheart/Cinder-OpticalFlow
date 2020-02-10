@@ -217,12 +217,12 @@ void ParticleSystemApp::draw(){
 
 	// draw camera feed
 	{
-		gl::ScopedMatrices matOpticalFlow;
-		gl::scale(mParticleRangeX / mCamResX, mParticleRangeY / mCamResY);
-		mOpticalFlow.drawFlowGrid();
+		//gl::ScopedMatrices matOpticalFlow;
+		//gl::scale(mParticleRangeX / mCamResX, mParticleRangeY / mCamResY);
+		//mOpticalFlow.drawFlowGrid();
 
-		//Rectf bounds(0, 0, mParticleRangeX, mParticleRangeY);
-		//gl::draw(mDefaultCamTexture, bounds);
+		Rectf bounds(0, 0, mParticleRangeX, mParticleRangeY);
+		gl::draw(flipCamTexture(), bounds);
 	
 	}
 

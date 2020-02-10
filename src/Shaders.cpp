@@ -60,7 +60,8 @@ void Shaders::setup() {
 					vec2 y1 = vec2(0., uOffset.y);
 
 					//get the difference
-					vec4 curdif = b - a;
+					vec4 curdifX = b - a;
+					vec4 curdifY = a - b; // the difference is opposite otherwise vy is flipped
 
 					//calculate the gradient
 					//for X________________
@@ -69,13 +70,12 @@ void Shaders::setup() {
 
 					//for Y________________
 					vec4 grady = texture2DRectGray(tex1, vTexCoord0 + y1) - texture2DRectGray(tex1, vTexCoord0 - y1);
-					grady += texture2DRectGray(tex0, vTexCoord0 + y1) - texture2DRectGray(tex0, vTexCoord0 - y1);
+					grady += texture2DRectGray(tex0, vTexCoord0 + y1) - texture2DRectGray(tex0, vTexCoord0 - y1) ;
 
 					vec4 gradmag = sqrt((gradx * gradx) + (grady * grady) + vec4(uLambda));
 
-					vec4 vx = curdif * (gradx / gradmag);
-					vec4 vy = curdif * (grady / gradmag);
-
+					vec4 vx = curdifX * (gradx / gradmag);
+					vec4 vy = curdifY * (grady / gradmag);
 					oColor = getColorCoded(vx.r, vy.r, uScale);
 				}
 			))
