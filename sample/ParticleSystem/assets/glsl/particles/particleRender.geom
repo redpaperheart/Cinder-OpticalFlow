@@ -17,8 +17,7 @@ in vData{
 	vec4	home;
 }vertices[];
 
-void main(){
-	// drawing lines 
+void drawLines(){
 	for(int i = 0;i < gl_in.length();i++){
 		gl_Position = ciProjectionMatrix * (gl_in[i].gl_Position );
 		EmitVertex();
@@ -26,19 +25,28 @@ void main(){
 		EmitVertex();
 	}
 	EndPrimitive();
+}
 
-	// drawing rectangle
-	for (int j = 0; j < gl_in.length (); ++j) {
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-uParticleSize,  uParticleSize, 0.0, 0.0) );
+void drawRectangle(){
+	for (int i = 0; i < gl_in.length (); i++) {
+		gl_Position = ciProjectionMatrix* (gl_in [i].gl_Position + vec4 (-uParticleSize,  uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( uParticleSize,  uParticleSize, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [i].gl_Position + vec4 ( uParticleSize,  uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 ( uParticleSize, -uParticleSize, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [i].gl_Position + vec4 ( uParticleSize, -uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-uParticleSize, -uParticleSize, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [i].gl_Position + vec4 (-uParticleSize, -uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
-		gl_Position = ciProjectionMatrix* (gl_in [j].gl_Position + vec4 (-uParticleSize,  uParticleSize, 0.0, 0.0) );
+		gl_Position = ciProjectionMatrix* (gl_in [i].gl_Position + vec4 (-uParticleSize,  uParticleSize, 0.0, 0.0) );
 		EmitVertex   ();
 	  }
 	  EndPrimitive ();
+}
+
+void main(){
+	// drawing rectangle at particle's current position 
+	drawRectangle();
+
+	// drawing line from particle's initial position to current particle position
+	drawLines();	
 }

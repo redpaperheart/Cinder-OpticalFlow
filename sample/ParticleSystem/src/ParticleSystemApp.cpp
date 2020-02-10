@@ -111,8 +111,8 @@ void ParticleSystemApp::setup(){
 
 	for (int i = 0; i < mParticlesAlongX; i++) {
 		for (int j = 0; j < mParticlesAlongY; j++) {
-			float x = (mParticleGapX * i) + mParticlePosOffsetX; // Rand::randFloat(0, mParticleRangeX);
-			float y = (mParticleGapY * j) + mParticlePosOffsetY; //Rand::randFloat(0, mParticleRangeY);
+			float x = (mParticleGapX * i) + mParticlePosOffsetX; 
+			float y = (mParticleGapY * j) + mParticlePosOffsetY; 
 			float z = 0.0;
 			CI_LOG_I(mParticlesAlongX * j + i);
 			auto& p = particles.at(mParticlesAlongX * j + i);
