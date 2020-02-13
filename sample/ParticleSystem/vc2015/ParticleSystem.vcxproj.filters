@@ -74,10 +74,10 @@
     <None Include="..\assets\glsl\particles\particleRender.vert">
       <Filter>assets\glsl\particles</Filter>
     </None>
-    <None Include="..\assets\glsl\particles\particleUpdate.comp">
+    <None Include="..\assets\glsl\particles\particleRender.geom">
       <Filter>assets\glsl\particles</Filter>
     </None>
-    <None Include="..\assets\glsl\particles\particleRender.geom">
+    <None Include="..\assets\glsl\particles\particleUpdate.vert">
       <Filter>assets\glsl\particles</Filter>
     </None>
   </ItemGroup>
