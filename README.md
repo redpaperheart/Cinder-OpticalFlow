@@ -9,6 +9,7 @@ Lines are drawn to show the directions of the particles from their initial posit
 
 ### Notes
 - A few chages where made to the shader files referenced from ofxMIOFlowGLSL to flip coordinate system and offset values.
+- The sample project was built using Visual Studio platform toolset v142 and Windows sdk 10.0.18362.0
 - The optical flow texture is used as a sampler2D uniform in the compute shader and the velocity is read via the following function.
 
 ```cpp

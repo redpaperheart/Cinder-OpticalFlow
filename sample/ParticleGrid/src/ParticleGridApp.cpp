@@ -209,7 +209,7 @@ void ParticleGridApp::draw() {
 
 	// draw camera feed
 	{
-		// uncoment this section to see the optical flow texture instead of the camera feed behind the particles
+		// use this section to see the optical flow texture instead of the camera feed behind the particles
 		//gl::ScopedMatrices matOpticalFlow;
 		//gl::scale(mParticleRangeX / mCamResX, mParticleRangeY / mCamResY);
 		//mOpticalFlow.drawFlowGrid();
