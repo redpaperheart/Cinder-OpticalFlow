@@ -1,7 +1,7 @@
 /*
 
 	ParticleRender.geom
-		- Shuvashis Das | Red Paper Heart Studio
+		- Shuvashis Das 02/13/2020
 
 */
 

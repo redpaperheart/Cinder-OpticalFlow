@@ -13,32 +13,32 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
     <Filter Include="Blocks">
-      <UniqueIdentifier>{3F776589-9F41-4366-817D-8E56A6C8ED23}</UniqueIdentifier>
+      <UniqueIdentifier>{23D66E11-B373-4CD5-882C-A3ED339B162A}</UniqueIdentifier>
     </Filter>
     <Filter Include="Blocks\Cinder-OpticalFlow">
-      <UniqueIdentifier>{7974A9C9-E16C-4DF1-B71E-9BB8E28BADBF}</UniqueIdentifier>
+      <UniqueIdentifier>{C544CDE3-5A89-48AC-9D36-1F21EFBA927C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Blocks\Cinder-OpticalFlow\src">
-      <UniqueIdentifier>{79F3F137-E11A-43FD-B11D-2EBEAB20E03E}</UniqueIdentifier>
+      <UniqueIdentifier>{1C6524D6-55E5-411B-A210-93FF445DD660}</UniqueIdentifier>
     </Filter>
     <Filter Include="Blocks\Cinder-OpticalFlow\include">
-      <UniqueIdentifier>{D7D65566-D0A9-4132-9F3C-6E0E0E861B75}</UniqueIdentifier>
+      <UniqueIdentifier>{220F90AC-6AFB-4E9C-B297-539D7E59AD5D}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets">
-      <UniqueIdentifier>{4c4bfe5d-5a5c-4f17-83bb-76ee73eaf03b}</UniqueIdentifier>
+      <UniqueIdentifier>{b4e9f9f7-7d29-4821-93f8-7f82dc2d577f}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets\glsl">
-      <UniqueIdentifier>{426945e4-027b-4487-b02e-bead40da73e8}</UniqueIdentifier>
+      <UniqueIdentifier>{5fa6b5b4-b2c6-4e93-ae1d-455b5caaedd4}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets\glsl\particles">
-      <UniqueIdentifier>{902840d5-adac-4776-87d7-18c1fefb711f}</UniqueIdentifier>
+      <UniqueIdentifier>{cc10e275-438c-428a-a349-f5b5fba7cce8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\ParticleSystemApp.cpp">
+    <ClCompile Include="..\src\ParticleGridApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ParticleSystemApp.cpp">
+    <ClCompile Include="..\src\ParticleGridApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClInclude Include="..\include\Resources.h">
@@ -71,13 +71,13 @@
     <None Include="..\assets\glsl\particles\particleRender.frag">
       <Filter>assets\glsl\particles</Filter>
     </None>
+    <None Include="..\assets\glsl\particles\particleRender.geom">
+      <Filter>assets\glsl\particles</Filter>
+    </None>
     <None Include="..\assets\glsl\particles\particleRender.vert">
       <Filter>assets\glsl\particles</Filter>
     </None>
     <None Include="..\assets\glsl\particles\particleUpdate.comp">
-      <Filter>assets\glsl\particles</Filter>
-    </None>
-    <None Include="..\assets\glsl\particles\particleRender.geom">
       <Filter>assets\glsl\particles</Filter>
     </None>
   </ItemGroup>

@@ -18,8 +18,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{671F3278-B317-472E-A0A4-D3814BEAEFF4}</ProjectGuid>
-    <RootNamespace>ParticleSystem</RootNamespace>
+    <ProjectGuid>{C6032FCB-D857-4119-BC8F-B2F76984B292}</ProjectGuid>
+    <RootNamespace>ParticleGrid</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -196,7 +196,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ClCompile Include="..\src\ParticleSystemApp.cpp" />
+    <ClCompile Include="..\src\ParticleGridApp.cpp" />
     <ClCompile Include="..\..\..\src\OpticalFlow.cpp" />
     <ClCompile Include="..\..\..\src\Shaders.cpp" />
   </ItemGroup>

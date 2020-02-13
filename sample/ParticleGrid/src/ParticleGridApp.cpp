@@ -1,7 +1,7 @@
 /*
 
-	ParticleSystemApp.h
-		- Shuvashis Das | Red Paper Heart Studio
+	ParticleGridApp.h
+		- Shuvashis Das 02/13/2020
 
 */
 
@@ -36,38 +36,37 @@ struct Particle
 };
 #pragma pack( pop )
 
-//const int mNumParticles = static_cast<int>(200e3);
 
-class ParticleSystemApp : public App {
-  public:
-	  void								setup() override;
-	  void								update() override;
-	  void								draw() override;
-	  gl::TextureRef					flipCamTexture();
+class ParticleGridApp : public App {
+public:
+	void								setup() override;
+	void								update() override;
+	void								draw() override;
+	gl::TextureRef						flipCamTexture();
 
-	  // Optical Flow variables
-	  float								mLambda;
-	  float								mBlurAmount;
-	  float								mDisplacement;
-	  CaptureRef						mCapture;
-	  gl::TextureRef					mDefaultCamTexture;
-	  gl::FboRef						mCamTexFlippedFbo;
-	  OpticalFlow						mOpticalFlow;
-	  int								mCamResX = 640;
-	  int								mCamResY = 480;
+	// Optical Flow variables
+	float								mLambda;
+	float								mBlurAmount;
+	float								mDisplacement;
+	CaptureRef							mCapture;
+	gl::TextureRef						mDefaultCamTexture;
+	gl::FboRef							mCamTexFlippedFbo;
+	OpticalFlow							mOpticalFlow;
+	int									mCamResX = 640;
+	int									mCamResY = 480;
 
-	  // Particle system variables 
-	  int								mParticleRangeX = mCamResX * 2;
-	  int								mParticleRangeY = mCamResY * 2;
-	  float								mParticleSize = 5.0;
-	  int								mParticlesAlongX = 32;
-	  int								mParticlesAlongY = 24;
-	  int								mParticleGapX = mParticleRangeX / mParticlesAlongX;
-	  int								mParticleGapY = mParticleRangeY / mParticlesAlongY;
-	  int								mParticlePosOffsetX = (mParticleRangeX / mParticlesAlongX)/2;
-	  int								mParticlePosOffsetY = (mParticleRangeY / mParticlesAlongY)/2;
-	  const int							mNumParticles = static_cast<int>(mParticlesAlongX * mParticlesAlongY);
-	  float								mForceMult = 10.0;
+	// Particle system variables 
+	int									mParticleRangeX = mCamResX * 2;
+	int									mParticleRangeY = mCamResY * 2;
+	float								mParticleSize = 5.0;
+	int									mParticlesAlongX = 32;
+	int									mParticlesAlongY = 24;
+	int									mParticleGapX = mParticleRangeX / mParticlesAlongX;
+	int									mParticleGapY = mParticleRangeY / mParticlesAlongY;
+	int									mParticlePosOffsetX = (mParticleRangeX / mParticlesAlongX) / 2;
+	int									mParticlePosOffsetY = (mParticleRangeY / mParticlesAlongY) / 2;
+	const int							mNumParticles = static_cast<int>(mParticlesAlongX * mParticlesAlongY);
+	float								mForceMult = 10.0;
 
 
 
@@ -82,7 +81,7 @@ private:
 	gl::VaoRef							mAttributes;
 };
 
-void ParticleSystemApp::setup(){
+void ParticleGridApp::setup() {
 	gl::enableAlphaBlending();
 
 	// Optical Flow setup
@@ -111,8 +110,8 @@ void ParticleSystemApp::setup(){
 
 	for (int i = 0; i < mParticlesAlongX; i++) {
 		for (int j = 0; j < mParticlesAlongY; j++) {
-			float x = (mParticleGapX * i) + mParticlePosOffsetX; 
-			float y = (mParticleGapY * j) + mParticlePosOffsetY; 
+			float x = (mParticleGapX * i) + mParticlePosOffsetX;
+			float y = (mParticleGapY * j) + mParticlePosOffsetY;
 			float z = 0.0;
 			// CI_LOG_I(mParticlesAlongX * j + i);
 			auto& p = particles.at(mParticlesAlongX * j + i);
@@ -120,7 +119,7 @@ void ParticleSystemApp::setup(){
 			p.initPos = p.pos;
 			p.ppos = p.initPos;
 			p.damping = 0.85f;
-			p.color = vec4(1.0);//)vec4(c.r, c.g, c.b, 1.0f);
+			p.color = vec4(1.0);
 		}
 	}
 
@@ -157,7 +156,7 @@ void ParticleSystemApp::setup(){
 	gl::vertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(GLuint), 0);
 
 	try {
-		//// Load our update program.
+		// Load our update program.
 		mUpdateProg = gl::GlslProg::
 			create(gl::GlslProg::Format().compute(loadAsset("glsl/particles/particleUpdate.comp")));
 	}
@@ -167,7 +166,7 @@ void ParticleSystemApp::setup(){
 	}
 }
 
-gl::TextureRef ParticleSystemApp::flipCamTexture() {
+gl::TextureRef ParticleGridApp::flipCamTexture() {
 	gl::clear(Color::black());
 	gl::ScopedFramebuffer fbScpLastTex(mCamTexFlippedFbo);
 	gl::ScopedViewport scpVpLastTex(ivec2(0), mCamTexFlippedFbo->getSize());
@@ -179,7 +178,7 @@ gl::TextureRef ParticleSystemApp::flipCamTexture() {
 	return mCamTexFlippedFbo->getColorTexture();
 }
 
-void ParticleSystemApp::update(){
+void ParticleGridApp::update() {
 	//optical flow update
 	if (mCapture && mCapture->checkNewFrame()) {
 		if (!mDefaultCamTexture) {
@@ -205,11 +204,12 @@ void ParticleSystemApp::update(){
 	gl::memoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
 
-void ParticleSystemApp::draw(){
+void ParticleGridApp::draw() {
 	gl::clear(Color(0, 0, 0));
 
 	// draw camera feed
 	{
+		// uncoment this section to see the optical flow texture instead of the camera feed behind the particles
 		//gl::ScopedMatrices matOpticalFlow;
 		//gl::scale(mParticleRangeX / mCamResX, mParticleRangeY / mCamResY);
 		//mOpticalFlow.drawFlowGrid();
@@ -217,7 +217,7 @@ void ParticleSystemApp::draw(){
 		gl::ScopedMatrices matCamFeed;
 		Rectf bounds(0, 0, mParticleRangeX, mParticleRangeY);
 		gl::draw(flipCamTexture(), bounds);
-	
+
 	}
 
 	// darw particle system on top of camera feed
@@ -244,7 +244,7 @@ void ParticleSystemApp::draw(){
 	}
 }
 
-CINDER_APP(ParticleSystemApp, RendererGl, [](App::Settings* settings) {
+CINDER_APP(ParticleGridApp, RendererGl, [](App::Settings * settings) {
 	settings->setWindowSize(appScreenWidth, appScreenHeight);
 	settings->setMultiTouchEnabled(false);
 })

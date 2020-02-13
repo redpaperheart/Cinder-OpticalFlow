@@ -1,7 +1,7 @@
 /*
 
 	ParticleUpdate.comp
-		- Shuvashis Das | Red Paper Heart Studio
+		- Shuvashis Das 02/13/2020
 
 */
 
@@ -21,7 +21,8 @@ const float					dt2 = 1.0 / (10*10.0);
 // returns optical flow velocity based on parfticle position
 vec2 lookupOpticalFlowVelocity(vec2 pos) {
 	vec2 coord = (pos.xy / uCanvasSize);
-	coord.y = 1.0 - coord.y; // flipping y coordinate
+	// flipping y coordinate
+	coord.y = 1.0 - coord.y; 
 	vec4 col = texture2D(uTexOpticalFlow, coord);
 	if (col.w >0.95)  col.z=col.z*-1;
 	return vec2(-1*(col.y-col.x),col.z);
@@ -43,10 +44,9 @@ layout( std140, binding = 0 ) buffer Part{
 
 layout( local_size_x = 128, local_size_y = 1, local_size_z = 1 ) in;
 
-
 void main(){
 
-	uint gid			=			gl_GlobalInvocationID.x;	// The .y and .z are both 1 in this case.
+	uint gid			=			gl_GlobalInvocationID.x;
 	vec3 position		=			particles[gid].pos;
 	vec3 pposition		=			particles[gid].ppos;
 	float damping		=			particles[gid].damping;
